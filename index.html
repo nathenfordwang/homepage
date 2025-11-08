@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Network Forensics | Andy Wang</title>
+  <meta name="description" content="Andy Wang - IT Infrastructure, Risk Management, Investment Analysis, Market Research, Personalized Consulting.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary: #3b82f6; --dark: #0f172a; --light: #f8fafc; --gray: #64748b; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Inter', sans-serif; background: var(--dark); color: var(--light); line-height:1.6; transition: all 0.3s; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+
+    header { text-align: center; padding: 4rem 0 1rem; position: relative; }
+    .logo { font-size: 2.8rem; font-weight: 600; color: var(--primary); letter-spacing: -1px; }
+    .lang-switch { position: absolute; top: 2rem; right: 2rem; }
+    .lang-btn { background: #1e293b; color: #e2e8f0; border: none; padding: 0.5rem 1rem; margin: 0 0.25rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; }
+    .lang-btn.active { background: var(--primary); color: white; }
+
+    .tagline { font-size: 1.2rem; color: #94a3b8; margin: 1rem 0 3rem; text-align: center; }
+
+    .services { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+      gap: 1.5rem; 
+      margin: 2rem 0; 
+    }
+    .service-card { 
+      background: #1e293b; 
+      padding: 1.5rem; 
+      border-radius: 12px; 
+      text-align: center; 
+      transition: transform 0.2s; 
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .service-card:hover { transform: translateY(-5px); }
+    .service-card h3 { 
+      color: var(--primary); 
+      margin-bottom: 0.8rem; 
+      font-size: 1.2rem; 
+      min-height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .service-card p { 
+      margin: 0.4rem 0; 
+      font-size: 0.93rem; 
+      color: #cbd5e1;
+      word-wrap: break-word;
+      line-height: 1.5;
+    }
+
+    .contact-section { text-align: center; margin: 3rem 0; }
+    .contact-title { font-size: 1.3rem; color: #e2e8f0; margin-bottom: 1.5rem; font-weight: 600; }
+
+    /* 名片：縮窄 + 適中間距 */
+    .business-card { 
+      background: linear-gradient(135deg, #1e293b 0%, #16213a 100%);
+      padding: 1.8rem; 
+      border-radius: 16px; 
+      max-width: 520px;   /* 適中寬度 */
+      margin: 0 auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
+      border: 1px solid #334155;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;        /* 中間間距適中 */
+      flex-wrap: wrap;
+    }
+    .card-left { flex: 1; min-width: 260px; }
+    .card-right { 
+      flex-shrink: 0; 
+      width: 110px; 
+      height: 110px; 
+      background: #334155; 
+      border-radius: 12px; 
+      overflow: hidden;
+    }
+
+    .card-header { 
+      display: flex; 
+      align-items: center; 
+      gap: 1rem; 
+      margin-bottom: 1rem; 
+      flex-wrap: nowrap;
+    }
+    .card-logo { font-size: 2rem; font-weight: 600; color: var(--primary); flex-shrink: 0; }
+    .card-name { font-size: 1.3rem; font-weight: 600; color: #e2e8f0; }
+    .card-title { 
+      font-size: 0.95rem; 
+      color: #94a3b8; 
+      margin-bottom: 1rem; 
+      min-height: 1.5rem;
+    }
+
+    .card-contact { font-size: 1rem; line-height: 1.8; }
+    .card-contact a { color: var(--primary); text-decoration: none; font-weight: 500; }
+    .card-contact a:hover { text-decoration: underline; }
+    .contact-line {
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+    }
+    .contact-line span:first-child {
+      min-width: 60px;
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    footer { text-align: center; padding: 3rem 0 2rem; color: var(--gray); font-size: 0.9rem; }
+
+    [data-lang="en"] { display: none; }
+    body.lang-en [data-lang="zh"] { display: none; }
+    body.lang-en [data-lang="en"] { display: block; }
+
+    @media (max-width: 768px) { 
+      .services { grid-template-columns: 1fr 1fr; }
+      .business-card { flex-direction: column; text-align: center; }
+      .card-left, .card-right { width: 100%; }
+      .card-right { margin-top: 1rem; height: 100px; }
+    }
+    @media (max-width: 480px) { 
+      .services { grid-template-columns: 1fr; }
+      .logo { font-size: 2.2rem; } 
+      .business-card { padding: 1.5rem; }
+      .card-header { flex-direction: column; text-align: center; gap: 0.5rem; }
+      .lang-switch { position: static; margin: 1rem auto; text-align: center; }
+    }
+  </style>
+</head>
+<body class="lang-zh">
+
+  <div class="container">
+    <header>
+      <div class="logo">Network Forensics</div>
+      <div class="lang-switch">
+        <button class="lang-btn active" onclick="switchLang('zh')">中</button>
+        <button class="lang-btn" onclick="switchLang('en')">EN</button>
+      </div>
+    </header>
+
+    <p class="tagline" data-lang="zh">IT 建置 × 風險管理 × 投資分析 × 市場調研 × 個人化支援</p>
+    <p class="tagline" data-lang="en">IT Infrastructure × Risk Management × Investment Analysis × Market Research × Personalized Support</p>
+
+    <section class="services">
+      <div class="service-card">
+        <h3 data-lang="zh">IT 建置服務</h3><h3 data-lang="en">IT Infrastructure</h3>
+        <p data-lang="zh">NAS 架設、網路優化</p><p data-lang="en">NAS Setup, Network Optimization</p>
+        <p data-lang="zh">遠端備份、資安規劃</p><p data-lang="en">Remote Backup, Security Planning</p>
+      </div>
+      <div class="service-card">
+        <h3 data-lang="zh">資訊設備顧問</h3><h3 data-lang="en">IT Equipment Consulting</h3>
+        <p data-lang="zh">硬體選型、系統整合</p><p data-lang="en">Hardware Selection, System Integration</p>
+        <p data-lang="zh">周邊設備配置、採購建議</p><p data-lang="en">Peripheral Setup, Procurement Advice</p>
+      </div>
+      <div class="service-card">
+        <h3 data-lang="zh">風險管理分析</h3><h3 data-lang="en">Risk Management Analysis</h3>
+        <p data-lang="zh">數據抓取、波動預測</p><p data-lang="en">Data Scraping, Volatility Forecasting</p>
+        <p data-lang="zh">壓力測試、避險策略</p><p data-lang="en">Stress Testing, Hedging Strategies</p>
+      </div>
+      <div class="service-card">
+        <h3 data-lang="zh">證券投資分析</h3><h3 data-lang="en">Securities Investment Analysis</h3>
+        <p data-lang="zh">基本面篩選、技術指標</p><p data-lang="en">Fundamental Screening, Technical Indicators</p>
+        <p data-lang="zh">財報解讀、選股模型</p><p data-lang="en">Financial Report Analysis, Stock Models</p>
+      </div>
+      <div class="service-card">
+        <h3 data-lang="zh">行銷市場調研</h3><h3 data-lang="en">Marketing & Market Research</h3>
+        <p data-lang="zh">問卷設計、數據清洗</p><p data-lang="en">Survey Design, Data Cleaning</p>
+        <p data-lang="zh">消費者洞察、競爭分析</p><p data-lang="en">Consumer Insights, Competitor Analysis</p>
+      </div>
+      <div class="service-card">
+        <h3 data-lang="zh">個人化服務</h3><h3 data-lang="en">Personalized Services</h3>
+        <p data-lang="zh">一對一諮詢、遠端除錯</p><p data-lang="en">1-on-1 Consulting, Remote Debugging</p>
+        <p data-lang="zh">專案代管、客製化方案</p><p data-lang="en">Project Hosting, Custom Solutions</p>
+      </div>
+    </section>
+
+    <section class="contact-section">
+      <div class="contact-title" data-lang="zh">聯繫方式：</div>
+      <div class="contact-title" data-lang="en">Contact Information:</div>
+      
+      <div class="business-card">
+        <!-- 左側：聯絡資訊 -->
+        <div class="card-left">
+          <div class="card-header">
+            <div class="card-logo">NF</div>
+            <div>
+              <div class="card-name">Andy Wang</div>
+              <div class="card-title" data-lang="zh">Network Forensics Consultant</div>
+              <div class="card-title" data-lang="en">Network Forensics Consultant</div>
+            </div>
+          </div>
+          <div class="card-contact">
+            <div class="contact-line">
+              <span data-lang="zh">Email:</span><span data-lang="en">Email:</span>
+              <a href="mailto:nathenford@hotmail.com">nathenford@hotmail.com</a>
+            </div>
+            <div class="contact-line" style="margin-top: 0.5rem;">
+              <span data-lang="zh">Phone:</span><span data-lang="en">Phone:</span>
+              <a href="tel:+886918150965">+886 918 150 965</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右側：Line QR Code -->
+        <div class="card-right">
+          <img src="line-qrcode.png" alt="Line QR Code" style="width:100%; height:100%; border-radius:8px;">
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p data-lang="zh">© 2025 Network Forensics. All rights reserved.</p>
+      <p data-lang="en">© 2025 Network Forensics. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    function switchLang(lang) {
+      document.body.className = 'lang-' + lang;
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('onclick').includes(lang)) btn.classList.add('active');
+      });
+      history.replaceState(null, null, '#' + lang);
+    }
+    window.addEventListener('load', () => {
+      const hash = location.hash.slice(1) || 'zh';
+      switchLang(hash);
+    });
+  </script>
+</body>
+</html>
