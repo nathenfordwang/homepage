@@ -1,78 +1,346 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
+<!DOCTYPE html> <!-- 宣告文件類型為 HTML5，確保瀏覽器以標準模式渲染 -->
+<html lang="zh-TW"> <!-- 設定網頁語言為繁體中文，有助於 SEO 與無障礙閱讀 -->
 <head>
+  <!-- 字符編碼設定，確保中文正確顯示 -->
   <meta charset="UTF-8" />
+  <!-- 響應式設計的核心設定，讓網頁在各裝置上正確縮放 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <!-- 網頁標題，顯示於瀏覽器分頁與搜尋結果 -->
   <title>Network Forensics | Andy Wang</title>
-  <meta name="description" content="Andy Wang - IT Infrastructure, Risk Management, Investment Analysis, Market Research, Personalized Consulting.">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- SEO 描述標籤，提供搜尋引擎與社群媒體預覽用的網頁說明 -->
+  <meta name="description" content="Andy Wang - Principal Security Consultant, Cybersecurity Forensics, Threat Intelligence, Risk Management, AI Solutions.">
+  
+  <!-- Google Fonts 外部字型載入，使用 Inter 字體確保跨平台視覺一致性 -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!--  ===== CSS 樣式區域開始 =====  -->
+  <!--  定義全站視覺變數，方便統一管理顏色、動畫等設計系統  -->
   <style>
-    :root { --primary: #3b82f6; --dark: #0f172a; --light: #f8fafc; --gray: #64748b; }
+    :root { 
+      --primary: #3b82f6;        /* 品牌主色：科技藍 */
+      --primary-dark: #2563eb;   /* 主色加深版，用於互動狀態 */
+      --dark: #0f172a;           /* 深色背景：現代科技感 */
+      --light: #f8fafc;          /* 淺色文字：高對比易讀性 */
+      --gray: #64748b;           /* 次要文字：層次區分 */
+      --card-bg: #1e293b;        /* 卡片背景：與主背景有區別的深灰 */
+      --transition: cubic-bezier(0.4, 0, 0.2, 1); /* 平滑動畫曲線 */
+    }
+    
+    /* 全局重置：消除瀏覽器預設樣式，確保跨瀏覽器一致性 */
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: 'Inter', sans-serif; background: var(--dark); color: var(--light); line-height:1.6; transition: all 0.3s; }
+    
+    /* 啟用平滑捲動，提升導覽體驗 */
+    html { scroll-behavior: smooth; }
+    
+    /* 主體樣式：定義基礎字體、背景、文字顏色與行高 */
+    body { 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--dark); 
+      color: var(--light); 
+      line-height:1.6; 
+      overflow-x: hidden; /* 防止橫向捲動 */
+    }
+    
+    /* 主容器：限制最大寬度並置中，確保大螢幕上的閱讀舒適度 */
     .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
 
-    header { text-align: center; padding: 4rem 0 1rem; position: relative; }
-    .logo { font-size: 2.8rem; font-weight: 600; color: var(--primary); letter-spacing: -1px; }
-    .lang-switch { position: absolute; top: 2rem; right: 2rem; }
-    .lang-btn { background: #1e293b; color: #e2e8f0; border: none; padding: 0.5rem 1rem; margin: 0 0.25rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; }
-    .lang-btn.active { background: var(--primary); color: white; }
+    /*  ===== 載入動畫區域 =====  */
+    /*  Header 載入動畫：頁面開啟時從上方淡入  */
+    header { 
+      text-align: center; 
+      padding: 5rem 0 3rem;
+      animation: headerFadeIn 0.8s var(--transition) backwards;
+      animation-delay: 0.1s;
+    }
+    
+    @keyframes headerFadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-    .tagline { font-size: 1.2rem; color: #94a3b8; margin: 1rem 0 3rem; text-align: center; }
+    /*  Logo 樣式：大型品牌識別字樣，使用主色與陰影強化視覺  */
+    .logo { 
+      font-size: 3.5rem; 
+      font-weight: 700; 
+      color: var(--primary); 
+      letter-spacing: -1.5px;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+    
+    /*  副標題樣式：說明品牌定位的次要文字  */
+    .subtitle {
+      font-size: 1.15rem;
+      color: var(--gray);
+      font-weight: 500;
+      margin-top: 0.5rem;
+      opacity: 0;
+      animation: fadeInUp 0.8s var(--transition) forwards;
+      animation-delay: 0.3s;
+    }
 
+    /*  ===== 模態視窗 (Modal) 區域 =====  */
+    /*  全螢幕遮罩：彈窗開啟時覆蓋整個視窗  */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none; /* 預設隱藏，由 JS 控制顯示 */
+      justify-content: center;
+      align-items: center;
+      z-index: 1000; /* 確保在最上層 */
+      opacity: 0;
+      animation: modalFadeIn 0.3s var(--transition) forwards;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /*  模態視窗內容：響應式設計，在不同裝置有不同尺寸  */
+    .modal-content {
+      background: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: 16px;
+      width: 90%; /* 行動版預設寬度 */
+      max-height: 85vh; /* 限制最大高度避免超出螢幕 */
+      overflow-y: auto; /* 內容過多時可捲動 */
+      border: 1px solid #334155;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      transform: scale(0.9) translateY(20px);
+      animation: modalSlideUp 0.4s var(--transition) forwards;
+      animation-delay: 0.1s;
+    }
+
+    /* 平板與小螢幕桌機：放大尺寸提升閱讀體驗 */
+    @media (min-width: 768px) {
+      .modal-content {
+        max-width: 780px;
+        padding: 3.2rem;
+      }
+    }
+
+    /* 大螢幕桌機：最大化利用空間展示專業內容 */
+    @media (min-width: 1024px) {
+      .modal-content {
+        max-width: 900px;
+        padding: 4rem;
+      }
+    }
+
+    /*  模態視窗滑入動畫  */
+    @keyframes modalSlideUp {
+      from {
+        transform: scale(0.9) translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /*  模態視窗標頭：標題與關閉按鈕的容器  */
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #334155;
+    }
+
+    /*  模態視窗標題：顯示服務名稱  */
+    .modal-title {
+      font-size: 1.5rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /*  關閉按鈕：X 符號，支援懸停與點擊動畫  */
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--gray);
+      font-size: 1.8rem;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.3s var(--transition);
+    }
+
+    .modal-close:hover {
+      background: #334155;
+      color: var(--light);
+      transform: rotate(90deg);
+    }
+
+    /*  模態視窗內容區：服務詳細說明文字  */
+    .modal-body {
+      color: var(--light);
+      line-height: 1.8;
+    }
+
+    .modal-body h4 {
+      color: var(--primary);
+      margin: 1.5rem 0 0.8rem;
+      font-size: 1.2rem;
+    }
+
+    .modal-body p {
+      margin-bottom: 0.8rem;
+      padding-left: 1rem;
+      border-left: 3px solid var(--primary);
+    }
+
+    /*  ===== 服務卡片網格區域 =====  */
+    /*  使用 CSS Grid 建立響應式卡片布局，自動調整欄位數量  */
     .services { 
       display: grid; 
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
       gap: 1.5rem; 
-      margin: 2rem 0; 
+      margin: 2.5rem 0;
     }
+    
+    /*  服務卡片：可點擊的互動元素，包含懸停與點擊動畫  */
     .service-card { 
-      background: #1e293b; 
-      padding: 1.5rem; 
+      background: var(--card-bg); 
+      padding: 1.8rem 1.5rem;
       border-radius: 12px; 
       text-align: center; 
-      transition: transform 0.2s; 
+      transition: all 0.4s var(--transition);
       height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      position: relative;
+      overflow: hidden;
+      opacity: 0; /* 初始隱藏，由動畫顯示 */
+      animation: cardStagger 0.6s var(--transition) forwards;
+      cursor: pointer;
     }
-    .service-card:hover { transform: translateY(-5px); }
+    
+    /*  卡片錯位載入動畫：依序延遲顯示，創造流暢視覺節奏  */
+    .service-card:nth-child(1) { animation-delay: 0.2s; }
+    .service-card:nth-child(2) { animation-delay: 0.3s; }
+    .service-card:nth-child(3) { animation-delay: 0.4s; }
+    .service-card:nth-child(4) { animation-delay: 0.5s; }
+    .service-card:nth-child(5) { animation-delay: 0.6s; }
+    .service-card:nth-child(6) { animation-delay: 0.7s; }
+    
+    @keyframes cardStagger {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /*  卡片懸停光暈效果：滑鼠移入時顯示藍色漸層  */
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    /*  卡片懸停動畫：上浮、放大、陰影增強  */
+    .service-card:hover { 
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    
+    /*  卡片點擊動畫：按下時縮小，提供觸覺回饋  */
+    .service-card:active {
+      transform: translateY(-2px) scale(0.98);
+    }
+
     .service-card h3 { 
       color: var(--primary); 
-      margin-bottom: 0.8rem; 
-      font-size: 1.2rem; 
+      margin-bottom: 1rem; 
+      font-size: 1.25rem;
+      font-weight: 600;
       min-height: 3rem;
       display: flex;
       align-items: center;
       justify-content: center;
     }
+    
     .service-card p { 
       margin: 0.4rem 0; 
-      font-size: 0.93rem; 
+      font-size: 0.95rem; 
       color: #cbd5e1;
       word-wrap: break-word;
       line-height: 1.5;
+      transition: color 0.3s;
+    }
+    
+    .service-card:hover p {
+      color: var(--light);
     }
 
-    .contact-section { text-align: center; margin: 3rem 0; }
-    .contact-title { font-size: 1.3rem; color: #e2e8f0; margin-bottom: 1.5rem; font-weight: 600; }
+    /*  ===== 名片區塊樣式 =====  */
+    /*  名片區塊：包含標題與聯繫資訊卡片  */
+    .contact-section { 
+      text-align: center; 
+      margin: 5rem 0 3rem;
+      opacity: 0;
+      animation: fadeInUp 0.8s var(--transition) forwards;
+      animation-delay: 0.8s;
+    }
 
-    /* 名片卡 */
+    /*  Contact Us 標題：獨立樣式，大號字體、品牌色、增加間距  */
+    .contact-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 2.5rem;
+      letter-spacing: -0.5px;
+    }
+
+    /*  名片卡片：雙欄布局（左側資訊 / 右側 QR Code）  */
     .business-card { 
-      background: linear-gradient(135deg, #1e293b 0%, #16213a 100%);
-      padding: 1.8rem; 
+      background: linear-gradient(135deg, var(--card-bg) 0%, #16213a 100%);
+      padding: 2.2rem;
       border-radius: 16px; 
       max-width: 520px;
-      margin: 0 auto;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
+      margin: 0 auto; /* 水平置中 */
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
       border: 1px solid #334155;
       display: flex;
       align-items: center;
-      gap: 1.2rem;
+      gap: 1.5rem;
       flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
     }
-    .card-left { flex: 1; min-width: 260px; }
+
+    /*  名片左側：個人資訊區域  */
+    .card-left { 
+      flex: 1; 
+      min-width: 260px; 
+      position: relative;
+      z-index: 1;
+    }
+    
+    /*  名片右側：QR Code 圖片區域  */
     .card-right {
       flex-shrink: 0;
       width: 120px;
@@ -82,15 +350,28 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      transition: all 0.4s var(--transition);
     }
+    
+    .card-right:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+
     .card-right img {
       width: 100%;
       height: auto;
       aspect-ratio: 1 / 1;
       object-fit: contain;
       border-radius: 8px;
+      transition: transform 0.4s;
     }
 
+    .card-right:hover img {
+      transform: scale(1.1);
+    }
+
+    /*  名片表頭：NF Logo 與姓名職稱的組合  */
     .card-header { 
       display: flex; 
       align-items: center; 
@@ -98,143 +379,412 @@
       margin-bottom: 1rem; 
       flex-wrap: nowrap;
     }
-    .card-logo { font-size: 2rem; font-weight: 600; color: var(--primary); flex-shrink: 0; }
-    .card-name { font-size: 1.3rem; font-weight: 600; color: #e2e8f0; }
-    .card-title { font-size: 0.95rem; color: #94a3b8; margin-bottom: 1rem; min-height: 1.5rem; }
+    
+    /*  NF Logo：品牌縮寫，使用主色與陰影  */
+    .card-logo { 
+      font-size: 2.2rem; 
+      font-weight: 700; 
+      color: var(--primary); 
+      flex-shrink: 0;
+      text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+    }
+    
+    .card-name { 
+      font-size: 1.5rem; 
+      font-weight: 600; 
+      color: var(--light);
+      letter-spacing: -0.5px;
+    }
+    
+    /*  職稱：次要資訊，使用灰色  */
+    .card-title { 
+      font-size: 0.95rem; 
+      color: var(--gray); 
+      margin-bottom: 1rem; 
+      min-height: 1.5rem;
+      font-weight: 500;
+      line-height: 1.4;
+    }
 
-    .card-contact { font-size: 1rem; line-height: 1.8; word-break: break-all; }
-    .card-contact a { color: var(--primary); text-decoration: none; font-weight: 500; }
-    .card-contact a:hover { text-decoration: underline; }
+    /*  聯繫資訊：Email 連結樣式  */
+    .card-contact { 
+      font-size: 1rem; 
+      line-height: 1.8; 
+      word-break: break-all;
+    }
+    
+    .card-contact a { 
+      color: var(--primary); 
+      text-decoration: none; 
+      font-weight: 500;
+      position: relative;
+      transition: color 0.3s;
+    }
+    
+    /*  連結底線動畫：懸停時從左至右展開  */
+    .card-contact a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--primary);
+      transition: width 0.3s;
+    }
+    
+    .card-contact a:hover::after {
+      width: 100%;
+    }
+    
+    .card-contact a:hover {
+      color: var(--light);
+    }
+    
+    /*  聯繫資訊行：彈性布局，標籤與內容自動對齊  */
     .contact-line {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
       white-space: normal;
     }
+    
     .contact-line span:first-child {
       min-width: 60px;
       display: inline-block;
       margin-right: 8px;
     }
 
-    footer { text-align: center; padding: 3rem 0 2rem; color: var(--gray); font-size: 0.9rem; }
-
-    [data-lang="en"] { display: none; }
-    body.lang-en [data-lang="zh"] { display: none; }
-    body.lang-en [data-lang="en"] { display: block; }
-
-    @media (max-width: 768px) { 
-      .services { grid-template-columns: 1fr 1fr; }
-      .business-card { flex-direction: column; text-align: center; }
-      .card-right { width: 50%; margin-top: 1rem; }
+    /*  ===== 頁尾區域 =====  */
+    /*  版權聲明：置中、灰色文字、淡入動畫  */
+    footer { 
+      text-align: center; 
+      padding: 3rem 0 2rem; 
+      color: var(--gray); 
+      font-size: 0.9rem;
+      opacity: 0;
+      animation: fadeIn 0.6s var(--transition) forwards;
+      animation-delay: 1s;
     }
+    
+    /*  基礎淡入動畫  */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    /*  向上淡入動畫：用於名片區塊  */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /*  ===== 響應式設計調整 =====  */
+    /*  平板與手機：調整字體大小與布局方向  */
+    @media (max-width: 768px) { 
+      .services { grid-template-columns: 1fr 1fr; } /* 服務卡片改為兩欄 */
+      .logo { font-size: 2.8rem; }
+      .subtitle { font-size: 1rem; }
+      .business-card { 
+        flex-direction: column; /* 名片改為垂直布局 */
+        text-align: center;
+        padding: 1.8rem;
+      }
+      .card-right { 
+        width: 140px;
+        margin-top: 1rem; 
+      }
+    }
+    
+    /*  手機：進一步簡化為單欄布局  */
     @media (max-width: 480px) { 
       .services { grid-template-columns: 1fr; }
-      .logo { font-size: 2.2rem; } 
-      .business-card { padding: 1.5rem; }
-      .card-header { flex-direction: column; text-align: center; gap: 0.5rem; }
-      .card-right { width: 70%; margin: 1rem auto 0; }
-      .lang-switch { position: static; margin: 1rem auto; text-align: center; }
+      .logo { font-size: 2.2rem; }
+      .subtitle { font-size: 0.9rem; }
+      .card-right { width: 70%; max-width: 160px; }
     }
   </style>
 </head>
-<body class="lang-zh">
 
+<!--  ===== HTML 結構區域開始 =====  -->
+<body class="lang-zh"> <!-- 初始語言設定為繁體中文 -->
+
+  <!-- 主容器：限制內容寬度並置中 -->
   <div class="container">
+    
+    <!--  頁首區域：品牌 Logo 與副標題  -->
     <header>
       <div class="logo">Network Forensics</div>
-      <div class="lang-switch">
-        <button class="lang-btn active" onclick="switchLang('zh')">中</button>
-        <button class="lang-btn" onclick="switchLang('en')">EN</button>
-      </div>
+      <div class="subtitle">Cybersecurity Forensics & Threat Intelligence</div>
     </header>
 
-    <p class="tagline" data-lang="zh">IT 建置 × 風險管理分析 × 創意設計委託 × 行銷市場調研 × 個人化支援</p>
-    <p class="tagline" data-lang="en">IT Infrastructure × Risk Management Analysis × Creative Design Expert × Marketing & Market Research × Personalized Support</p>
-
+    <!--  服務卡片區域：六個服務項目的精簡展示  -->
     <section class="services">
-      <div class="service-card">
-        <h3 data-lang="zh">IT 建置服務</h3><h3 data-lang="en">IT Infrastructure</h3>
-        <p data-lang="zh">NAS 架設、網路優化</p><p data-lang="en">NAS Setup, Network Optimization</p>
-        <p data-lang="zh">遠端備份、資安規劃</p><p data-lang="en">Remote Backup, Security Planning</p>
-      </div>
-      <div class="service-card">
-        <h3 data-lang="zh">資訊設備顧問</h3><h3 data-lang="en">IT Equipment Consulting</h3>
-        <p data-lang="zh">硬體選型、系統整合</p><p data-lang="en">Hardware Selection, System Integration</p>
-        <p data-lang="zh">周邊設備配置、採購建議</p><p data-lang="en">Peripheral Setup, Procurement Advice</p>
-      </div>
-      <div class="service-card">
-        <h3 data-lang="zh">風險管理分析</h3><h3 data-lang="en">Risk Management Analysis</h3>
-        <p data-lang="zh">數據抓取、波動預測</p><p data-lang="en">Data Scraping, Volatility Forecasting</p>
-        <p data-lang="zh">壓力測試、避險策略</p><p data-lang="en">Stress Testing, Hedging Strategies</p>
-      </div>
-      <div class="service-card">
-        <h3 data-lang="zh">創意設計委託</h3><h3 data-lang="en">Creative Design Expert</h3>
-        <p data-lang="zh">繪圖設計、視覺美學</p><p data-lang="en">Graphic Design, Visual Aesthetics</p>
-        <p data-lang="zh">LOGO 創作、品牌識別</p><p data-lang="en">Logo Creation, Brand Identity</p>
-        <p data-lang="zh">美編排版、創意企劃</p><p data-lang="en">Art Direction, Creative Planning</p>
-      </div>
-      <div class="service-card">
-        <h3 data-lang="zh">行銷市場調研</h3><h3 data-lang="en">Marketing & Market Research</h3>
-        <p data-lang="zh">問卷設計、數據清洗</p><p data-lang="en">Survey Design, Data Cleaning</p>
-        <p data-lang="zh">消費者洞察、競爭分析</p><p data-lang="en">Consumer Insights, Competitor Analysis</p>
-      </div>
-      <div class="service-card">
-        <h3 data-lang="zh">個人化服務</h3><h3 data-lang="en">Personalized Services</h3>
-        <p data-lang="zh">一對一諮詢、遠端除錯</p><p data-lang="en">1-on-1 Consulting, Remote Debugging</p>
-        <p data-lang="zh">專案代管、客製化方案</p><p data-lang="en">Project Hosting, Custom Solutions</p>
-      </div>
+      <!-- 第 1 張卡片：IT 資訊服務 -->
+      <article class="service-card" data-service="it">
+        <h3>企業 IT 資訊整合服務</h3>
+        <p>架構・資安・備份</p>
+      </article>
+
+      <!-- 第 2 張卡片：AI 轉型賦能 -->
+      <article class="service-card" data-service="ai">
+        <h3>企業 AI 轉型賦能</h3>
+        <p>LLM 微調・提示詞工程・RAG</p>
+      </article>
+
+      <!-- 第 3 張卡片：量化風險分析 -->
+      <article class="service-card" data-service="risk">
+        <h3>量化風險策略與分析</h3>
+        <p>波動率預測・投資組合避險</p>
+      </article>
+
+      <!-- 第 4 張卡片：內容創意設計 -->
+      <article class="service-card" data-service="design">
+        <h3>全方位內容創意與設計</h3>
+        <p>品牌策略・視覺藝術・數位繪圖</p>
+      </article>
+
+      <!-- 第 5 張卡片：市場競爭策略 -->
+      <article class="service-card" data-service="marketing">
+        <h3>市場洞察與競爭策略</h3>
+        <p>消費者行為建模・戰略情報分析</p>
+      </article>
+
+      <!-- 第 6 張卡片：個人化諮詢 -->
+      <article class="service-card" data-service="personal">
+        <h3>專屬個人化服務</h3>
+        <p>１on １ 專屬諮詢・即時技術支援</p>
+		<p>專案全權代管・客觀效益導向</p>
+		<p>內建知識轉移・高階決策協同</p>
+      </article>
     </section>
 
+    <!--  ===== 模態視窗 (Modal) 區域 =====  -->
+    <!--  點擊服務卡片時彈出的詳細內容視窗  -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title" id="modalTitle"></div> <!-- 動態載入服務標題 -->
+          <button class="modal-close" onclick="closeModal()">&times;</button> <!-- 關閉按鈕 -->
+        </div>
+        <div class="modal-body" id="modalBody"></div> <!-- 動態載入服務詳細內容 -->
+      </div>
+    </div>
+
+    <!--  ===== 聯繫方式區域 =====  -->
+    <!--  名片卡片：個人聯繫資訊與 QR Code  -->
     <section class="contact-section">
-      <div class="contact-title" data-lang="zh">聯繫方式：</div>
-      <div class="contact-title" data-lang="en">Contact Information:</div>
+      <div class="contact-title">Contact Us</div> <!-- 聯繫標題 -->
       
       <div class="business-card">
         <div class="card-left">
           <div class="card-header">
-            <div class="card-logo">NF</div>
+            <div class="card-logo">NF</div> <!-- 品牌縮寫 Logo -->
             <div>
               <div class="card-name">Andy Wang</div>
-              <div class="card-title" data-lang="zh">Network Forensics Consultant</div>
-              <div class="card-title" data-lang="en">Network Forensics Consultant</div>
+              <div class="card-title">Principal Security Consultant</div> <!-- 專業職稱 -->
             </div>
           </div>
           <div class="card-contact">
             <div class="contact-line">
-              <span>Email:</span><a href="mailto:nathenford@hotmail.com">nathenford@hotmail.com</a>
-            </div>
-            <div class="contact-line" style="margin-top: 0.5rem;">
-              <span>Phone:</span><a href="tel:+886918150965">+886 918 150 965</a>
+              <span>Email:</span><a href="mailto:nathenford@hotmail.com">nathenford@hotmail.com</a> <!-- 電子郵件連結 -->
             </div>
           </div>
         </div>
 
         <div class="card-right">
-          <img src="line-qrcode.png" alt="Line QR Code">
+          <img src="line-qrcode.png" alt="Line QR Code" loading="lazy" width="120" height="120"> <!-- QR Code 圖片，lazy 載入優化效能 -->
         </div>
       </div>
     </section>
 
+    <!--  頁尾：版權聲明  -->
     <footer>
-      <p data-lang="zh">© 2025 Network Forensics. All rights reserved.</p>
-      <p data-lang="en">© 2025 Network Forensics. All rights reserved.</p>
+      <p>© 2025 Network Forensics. All rights reserved.</p>
     </footer>
   </div>
 
+  <!--  ===== JavaScript 功能區域 =====  -->
+  <!--  服務詳細資料：點擊卡片時動態載入的內容  -->
   <script>
-    function switchLang(lang) {
-      document.body.className = 'lang-' + lang;
-      document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.getAttribute('onclick').includes(lang)) btn.classList.add('active');
-      });
-      history.replaceState(null, null, '#' + lang);
+    const serviceData = {
+      it: {
+        title: "企業數位轉型的穩固基石",
+        content: `
+			<h4>服務定位：</h4>
+          	<p>我們專注於為成長型企業提供<strong>「端到端 (End-to-End)」</strong>的 IT 基礎架構解決方案，服務涵蓋從<strong>策略規劃</strong>、<strong>高效部署</strong>、到<strong>持續的營運維護</strong>。致力於成為您的一站式技術夥伴，建構兼具<strong>高度安全</strong>、<strong>絕對穩定</strong>、與<strong>卓越效能</strong>的企業數位神經中樞。</p>
+
+          	<h4>核心服務矩陣：</h4>
+          	<p><strong>企業級儲存與備份策略：</strong>建構高可靠度儲存系統，並規劃嚴謹的多層次備份與災難復原 (DR) 策略。</p>
+          	<p><strong>網路架構優化與效能調校：</strong>深度分析網路架構，透過專業調校顯著提升數據傳輸效率與穩定性。</p>
+          	<p><strong>零信任 (Zero Trust) 資安導入：</strong>精細化配置新世代防火牆 (NGFW) 策略，實現動態與主動的威脅防禦。</p>
+          	<p><strong>伺服器與端點整合方案：</strong>提供客觀中立的硬體選型評估，並執行無縫的系統整合與部署。</p>
+          	<p><strong>關鍵基礎設施規劃：</strong>配置高可用性 (HA) 的周邊設施，包含不斷電系統 (UPS) 與核心交換器等，確保營運不中斷。</p>
+          
+         	 <h4>我們的獨特價值：</h4>
+         	 <p><strong>策略導向的客製化設計：</strong>深入分析營運流程，量身打造具備高度彈性與未來擴展性的最適解決方案。</p>
+        	  <p><strong>IT 投資效益最佳化：</strong>憑藉精準的容量規劃，協助您杜絕不必要的資源浪費，最大化 IT 投資報酬率 (ROI)。</p>
+        	  <p><strong>7x24 全時主動式監控：</strong>全天候系統健康狀態監測，實現「早期預警、快速響應」的維運目標。</p>
+        	  <p><strong>嚴謹的技術文件交付：</strong>提供完整的網路拓撲圖、組態設定詳檔與標準維運手冊 (SOP)。</p>
+        `
+      },
+      ai: {
+        title: "企業生成式 AI 策略顧問",
+        content: `
+			<h4>服務定位：</h4>
+			<p>我們是企業導入<strong>生成式 AI (Generative AI)</strong> 的首席策略顧問。服務涵蓋從前沿模型評估、專業提示詞工程 (Prompt Engineering) 到系統無縫整合，專注於提供能<strong>直接驅動業務增長</strong>的定制化 AI 解決方案。</p>
+          
+			<h4>核心服務矩陣：</h4>
+			<p><strong>前沿 LLM 定制與微調：</strong>針對主流大語言模型進行監督式微調 (Supervised Fine-Tuning) 與領域知識適應，實現高度專業化的模型表現。</p>
+			<p><strong>高績效提示詞工程：</strong>設計企業級的提示詞範本與鍊式思維 (CoT) 策略，確保 AI 產出內容的高準確性與一致性。</p>
+			<p><strong>智慧應用整合與自動化：</strong>透過 API 開發，將定制化 AI 模型無縫嵌入企業現有系統，達成業務流程的端到端自動化。</p>
+			<p><strong>檢索增強生成 (RAG) 架構建置：</strong>專注於 RAG 系統與企業級向量資料庫 (Vector DB) 的設計，確保 AI 回覆基於內部最新知識資產。</p>
+          
+			<h4>我們的獨特價值：</h4>
+			<p><strong>模型成本效益優化 (MCE)：</strong>採用模型量化等技術，在不犧牲準確度的前提下，顯著降低 30-50% 的運算資源消耗，提升投資回報率 (ROI)。</p>
+			<p><strong>AI 治理與安全框架：</strong>建立嚴格的企業級提示詞輸入/輸出過濾機制與使用規範，確保 AI 應用的合規性與資訊安全。</p>
+			<p><strong>從 PoC 到生產的端到端交付：</strong>提供全方位的 AI 實施路徑，從概念驗證 (PoC) 到正式環境的高可用性 (HA) 部署。</p>
+			<p><strong>持續的 AI 效能監控與 MLOps：</strong>導入 MLOps 最佳實踐，持續追蹤 AI 表現指標，確保模型長期維持在最佳效能狀態。</p>
+        `
+      },
+      risk: {
+		title: "數位韌性的首席架構師",
+		content: `
+			<h4>服務定位：</h4>
+			<p>我們專注於運用<strong>高階量化模型</strong>與<strong>前沿機器學習 (Machine Learning)</strong> 技術，為資產管理者與金融機構提供<strong>科學化、數據驅動</strong>的風險評估框架，並設計具備<strong>卓越超額報酬 (Alpha)</strong> 的動態避險策略。</p>
+              
+			<h4>核心服務矩陣</h4>
+			<p><strong>金融數據工程與治理：</strong>建置高頻、低延遲的市場數據擷取管線，並實施嚴格的數據清洗與結構化資料庫治理。</p>
+			<p><strong>進階波動率建模：</strong>採用 GARCH 族模型、深度學習等多層次模型，實現市場波動率的高精度預測與實時監控。</p>
+			<p><strong>情境壓力測試與模擬：</strong>執行宏觀經濟衝擊情境下的投資組合壓力測試 (Stress Testing)，提供穩健的尾部風險 (Tail Risk) 暴露評估。</p>
+			<p><strong>多因子動態避險設計：</strong>針對投資組合特徵，設計並執行回測驗證 (Backtesting)，建構目標一致的動態對沖 (Dynamic Hedging) 策略。</p>
+              
+			<h4>我們的獨特價值</h4>
+			<p><strong>三維度因子風險模型：</strong>整合總體、市場、與特有因子 (Specific Factors)，提供穿透性的風險歸因分析。</p>
+			<p><strong>實時尾部風險監測：</strong>實時計算 VaR、CVaR、Expected Shortfall 等關鍵風險計量指標，實現主動式預警。</p>
+			<p><strong>基於偏好的風險敞口調優：</strong>根據客戶的效用函數 (Utility Function) 與風險容忍度，提供客製化分級的風險敞口調整建議。</p>
+			<p><strong>卓越的策略回測記錄：</strong>我們的避險策略在嚴苛的回測環境中，展示了穩定的超額表現與競爭優勢（例如：策略回測勝率 > 75%，Sharpe Ratio > 1.5）。</p>
+		`
+      },
+      design: {
+        title: "品牌美學與內容創作顧問",
+        content: `
+          <h4>服務定位</h4>
+          <p>我們的定位是結合商業策略與頂尖美學標準，提供<strong>全方位的視覺內容創作服務</strong>。專注於將設計、<strong>專業美編</strong>與<strong>數位繪圖</strong>的力量，轉化為<strong>品牌獨特的市場語彙</strong>與競爭優勢。</p>
+          
+          <h4>核心服務矩陣</h4>
+          <p><strong>企業識別系統 (CIS/VI) 建構：</strong>創建核心 LOGO、色彩規範、字體系統與視覺應用準則，確立穩固的品牌基調。</p>
+          <p><strong>數位內容與商業美編：</strong>執行高質量<strong>海報、簡報、社群媒體圖文</strong>等商業美編排版，確保資訊傳達的效率與美感。</p>
+          <p><strong>專業級數位與插畫繪圖：</strong>針對產品 IP、行銷活動或內容視覺，提供<strong>專業數位繪圖、概念藝術 (Concept Art)</strong> 與<strong>插畫設計</strong>。</p>
+          <p><strong>UI/UX 體驗優化與前端協作：</strong>專注於網站與應用程式的界面設計 (UI) 與用戶旅程優化 (UX)，並提供專業的前端協作服務。</p>
+          
+          <h4>我們的獨特價值</h4>
+          <p><strong>策略性藝術指導：</strong>所有繪圖與創意執行均基於品牌策略，確保藝術表達與<strong>商業目標完美對齊</strong>。</p>
+		  <p><strong>高精度內容交付：</strong>嚴格控制色彩管理與印刷標準，提供適用於多種媒體的<strong>高精度設計檔案</strong>。</p>
+		  <p><strong>全景式品牌接觸點管理：</strong>確保所有線上線下接觸點的視覺傳播<strong>高度一致性</strong>，鞏固品牌形象。</p>
+		  <p><strong>資產完整移交與授權：</strong>交付所有<strong>可編輯的原始設計檔案 (Source Files)</strong>，並附帶<strong>完整且永久的使用授權</strong>。</p>
+        `
+      },
+      marketing: {
+        title: "市場戰略情報中心",
+        content: `
+          <h4>服務定位</h4>
+          <p>我們的定位是<strong>市場戰略情報中心</strong>。透過嚴謹的<strong>混合研究方法 (Mixed-Method)</strong>，結合<strong>質化深度訪談</strong>與<strong>高階量化數據分析</strong>，為企業提供具備<strong>高可執行性</strong>和<strong>可量化效果</strong>的市場洞察與競爭策略藍圖。</p>
+          
+          <h4>核心服務矩陣</h4>
+		  <p><strong>數據採集與樣本治理：</strong>遵循統計學原則設計問卷與採集流程，確保獲得具備代表性的有效樣本與高回收率。</p>
+		  <p><strong>競爭情報與差異化分析：</strong>執行全面的<strong>競品標竿 (Benchmarking)</strong> 分析，明確企業在市場中的<strong>藍海機會</strong>。</p>
+		  <p><strong>消費者行為模型建構：</strong>進行行為數據的清洗、<strong>特徵工程 (Feature Engineering)</strong>，建構消費者行為預測與細分模型。</p>
+		  <p><strong>精準市場區隔 (Segmentation)：</strong>運用多變量統計方法，對潛在市場進行精準區隔，鎖定最具<strong>高價值、高潛力</strong>的目標客群。</p>
+              
+		  <h4>我們的獨特價值</h4>
+		  <p><strong>全景式混合研究框架：</strong>結合深度<strong>人種誌學 (Ethnography)</strong> 訪談與大規模量化數據，實現市場洞察的<strong>深度與廣度兼備</strong>。</p>
+		  <p><strong>持續性戰略情報監控：</strong>建立針對主要競爭對手的<strong>動態情報監控系統</strong>，確保策略建議的實時性和前瞻性。</p>
+		  <p><strong>互動式數據可視化交付：</strong>提供基於 Tableau/Power BI 的<strong>互動式 Dashboard</strong>，讓決策者即時掌握關鍵績效指標 (KPIs)。</p>
+		  <p><strong>從洞察到執行 (Insight-to-Action)：</strong>報告不僅提供問題，更直接交付<strong>具體行動方案 (Actionable Roadmap)</strong>，並預估量化回報 (ROI)。</p>
+        `
+      },
+      personal: {
+        title: "個人化服務",
+        content: `
+          <h4>服務定位</h4>
+          <p>我們的定位是您的<strong>外掛式技術長 (Fractional CTO)</strong>。提供<strong>完全專屬、一對一的高階技術諮詢</strong>與深度專案支援，以<strong>最高的信賴度</strong>，確保您的短期專案目標達成與長期技術策略穩健。</p>
+              
+		  <h4>核心服務矩陣</h4>
+		  <p><strong>專屬高階顧問會議：</strong>提供一對一定期的技術策略會議，專注於解決關鍵瓶頸、優化架構與前瞻性技術導入。</p>
+		  <p><strong>實時遠端除錯與響應：</strong>執行高效、徹底的遠端除錯與問題排查，確保<strong>平均響應時間 (ART) 低於 2 小時</strong>。</p>
+		  <p><strong>專案敏捷代管與交付：</strong>負責關鍵技術專案的代管與<strong>里程碑追蹤</strong>，確保嚴格的時間與質量標準。</p>
+		  <p><strong>技術藍圖設計與文檔標準化：</strong>提供從概念到落地的<strong>量身打造 (Bespoke) 技術藍圖</strong>，並輸出高標準的系統文檔。</p>
+              
+		  <h4>我們的獨特價值</h4>
+		  <p><strong>無綁約限制的高度彈性：</strong>提供按需、按時計費或<strong>靈活的專案包月方案</strong>，徹底解除長期合作的財務壓力。</p>
+		  <p><strong>極致快速的多管道支援：</strong>透過 LINE/Email/電話等多管道，提供 <strong>7x12 小時的極速支援</strong>與問題解決。</p>
+		  <p><strong>系統化的知識轉移機制：</strong>在問題解決過程中，融入<strong>防禦性知識傳授</strong>，建立客戶的內部技術韌性。</p>
+		  <p><strong>最高標準的商業保密承諾：</strong>嚴格遵守<strong>保密協議 (NDA)</strong>，將客戶的商業機密與數據安全置於首位。</p>
+        `
+      }
+    };
+
+    /*  開啟模態視窗函式：載入對應服務的詳細內容  */
+    function openModal(service) {
+      const data = serviceData[service];
+      
+      document.getElementById('modalTitle').innerHTML = data.title;
+      document.getElementById('modalBody').innerHTML = data.content;
+      
+      const overlay = document.getElementById('modalOverlay');
+      overlay.style.display = 'flex';
+      overlay.classList.remove('closing');
+      
+      // 防止背景滾動
+      document.body.style.overflow = 'hidden';
+	  // 重置捲動位置到頂部
+	  document.querySelector('.modal-content').scrollTop = 0;  
     }
-    window.addEventListener('load', () => {
-      const hash = location.hash.slice(1) || 'zh';
-      switchLang(hash);
+
+    /*  關閉模態視窗函式：觸發關閉動畫並隱藏元素  */
+    function closeModal() {
+      const overlay = document.getElementById('modalOverlay');
+      overlay.classList.add('closing');
+      
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+      }, 300);
+    }
+
+    /*  點擊遮罩背景關閉視窗的事件監聽  */
+    document.getElementById('modalOverlay').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
     });
+
+    /*  ESC 鍵關閉視窗的事件監聽  */
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+    /*  頁面載入完成後：為所有服務卡片綁定點擊事件  */
+    window.addEventListener('load', () => {
+      document.querySelectorAll('.service-card').forEach(card => {
+        card.addEventListener('click', function() {
+          const service = this.getAttribute('data-service');
+          openModal(service);
+        });
+      });
+    });
+    
+    /*  動態添加關閉動畫的 CSS 類別  */
+    const style = document.createElement('style');
+    style.textContent = `
+      .modal-overlay.closing {
+        animation: modalFadeIn 0.3s var(--transition) reverse forwards;
+      }
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 </html>
