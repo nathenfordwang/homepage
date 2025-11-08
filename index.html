@@ -58,28 +58,37 @@
     .contact-section { text-align: center; margin: 3rem 0; }
     .contact-title { font-size: 1.3rem; color: #e2e8f0; margin-bottom: 1.5rem; font-weight: 600; }
 
-    /* 名片：縮窄 + 適中間距 */
+    /* 名片卡 */
     .business-card { 
       background: linear-gradient(135deg, #1e293b 0%, #16213a 100%);
       padding: 1.8rem; 
       border-radius: 16px; 
-      max-width: 520px;   /* 適中寬度 */
+      max-width: 520px;
       margin: 0 auto;
       box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
       border: 1px solid #334155;
       display: flex;
       align-items: center;
-      gap: 1.2rem;        /* 中間間距適中 */
+      gap: 1.2rem;
       flex-wrap: wrap;
     }
     .card-left { flex: 1; min-width: 260px; }
-    .card-right { 
-      flex-shrink: 0; 
-      width: 110px; 
-      height: 110px; 
-      background: #334155; 
-      border-radius: 12px; 
+    .card-right {
+      flex-shrink: 0;
+      width: 120px;
+      max-width: 40%;
+      border-radius: 12px;
       overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .card-right img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      border-radius: 8px;
     }
 
     .card-header { 
@@ -91,21 +100,16 @@
     }
     .card-logo { font-size: 2rem; font-weight: 600; color: var(--primary); flex-shrink: 0; }
     .card-name { font-size: 1.3rem; font-weight: 600; color: #e2e8f0; }
-    .card-title { 
-      font-size: 0.95rem; 
-      color: #94a3b8; 
-      margin-bottom: 1rem; 
-      min-height: 1.5rem;
-    }
+    .card-title { font-size: 0.95rem; color: #94a3b8; margin-bottom: 1rem; min-height: 1.5rem; }
 
-    .card-contact { font-size: 1rem; line-height: 1.8; }
+    .card-contact { font-size: 1rem; line-height: 1.8; word-break: break-all; }
     .card-contact a { color: var(--primary); text-decoration: none; font-weight: 500; }
     .card-contact a:hover { text-decoration: underline; }
     .contact-line {
       display: flex;
       align-items: center;
-      flex-wrap: nowrap;
-      white-space: nowrap;
+      flex-wrap: wrap;
+      white-space: normal;
     }
     .contact-line span:first-child {
       min-width: 60px;
@@ -122,14 +126,14 @@
     @media (max-width: 768px) { 
       .services { grid-template-columns: 1fr 1fr; }
       .business-card { flex-direction: column; text-align: center; }
-      .card-left, .card-right { width: 100%; }
-      .card-right { margin-top: 1rem; height: 100px; }
+      .card-right { width: 50%; margin-top: 1rem; }
     }
     @media (max-width: 480px) { 
       .services { grid-template-columns: 1fr; }
       .logo { font-size: 2.2rem; } 
       .business-card { padding: 1.5rem; }
       .card-header { flex-direction: column; text-align: center; gap: 0.5rem; }
+      .card-right { width: 70%; margin: 1rem auto 0; }
       .lang-switch { position: static; margin: 1rem auto; text-align: center; }
     }
   </style>
@@ -187,7 +191,6 @@
       <div class="contact-title" data-lang="en">Contact Information:</div>
       
       <div class="business-card">
-        <!-- 左側：聯絡資訊 -->
         <div class="card-left">
           <div class="card-header">
             <div class="card-logo">NF</div>
@@ -199,19 +202,16 @@
           </div>
           <div class="card-contact">
             <div class="contact-line">
-              <span data-lang="zh">Email:</span><span data-lang="en">Email:</span>
-              <a href="mailto:nathenford@hotmail.com">nathenford@hotmail.com</a>
+              <span>Email:</span><a href="mailto:nathenford@hotmail.com">nathenford@hotmail.com</a>
             </div>
             <div class="contact-line" style="margin-top: 0.5rem;">
-              <span data-lang="zh">Phone:</span><span data-lang="en">Phone:</span>
-              <a href="tel:+886918150965">+886 918 150 965</a>
+              <span>Phone:</span><a href="tel:+886918150965">+886 918 150 965</a>
             </div>
           </div>
         </div>
 
-        <!-- 右側：Line QR Code -->
         <div class="card-right">
-          <img src="line-qrcode.png" alt="Line QR Code" style="width:100%; height:100%; border-radius:8px;">
+          <img src="line-qrcode.png" alt="Line QR Code">
         </div>
       </div>
     </section>
@@ -237,7 +237,4 @@
     });
   </script>
 </body>
-
 </html>
-
-
