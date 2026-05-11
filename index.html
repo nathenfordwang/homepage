@@ -517,6 +517,37 @@
       animation: fadeIn 0.6s var(--transition) forwards;
       animation-delay: 1s;
     }
+	/*  頁尾容器：增加LUCIFER顏色效果 */
+    .brand-lucifer {
+        /*  定義漸層色：深藍 -> 亮藍 -> 靛紫 */
+        background: linear-gradient(135deg, #1e293b 0%, #3b82f6 50%, #6366f1 100%);
+        
+        /*  關鍵屬性：將背景裁切至文字 */
+        -webkit-background-clip: text;
+        background-clip: text;
+        
+        /*  必須將文字原本顏色設為透明，否則看不到背景漸層 */
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+
+        font-weight: 900;
+        letter-spacing: 1px;
+        display: inline-block; /* 確保漸層渲染範圍精確 */
+        margin: 0 4px;
+    }
+
+    /* 讓其他文字保持低調的灰色質感 */
+    .text-secondary {
+        color: #64748b !important;
+    }
+	
+    /*  頁尾容器：增加頂部間距與極簡邊框 */
+    .site-footer {
+        padding: 40px 0;
+        margin-top: 60px;
+        background: transparent;
+        border-top: 1px solid rgba(0, 0, 0, 0.05); /* 極淡的分隔線 */
+    }
     
     /*  基礎淡入動畫  */
     @keyframes fadeIn {
@@ -575,6 +606,7 @@
       .subtitle { font-size: 0.9rem; }
       .card-right { width: 70%; max-width: 160px; }
     }
+	  
   </style>
 </head>
 
@@ -674,9 +706,15 @@
     </section>
 
     <!--  頁尾：版權聲明  -->
-    <footer>
-      <p>© 2025 Network Forensics. All rights reserved.</p>
-    </footer>
+	<footer class="site-footer">
+    <div class="container text-center">
+        <p class="copyright-text">
+            COPYRIGHT © 2026 <strong class="brand-lucifer">Astraea Lucifer</strong> All Rights Reserved 
+            <span class="footer-divider">|</span>
+            Design By <a href="https://www.nathenford.com" class="designer-link" target="_blank">Nathenford</a>
+        </p>
+    </div>
+	</footer>
   </div>
 
   <!--  ===== JavaScript 功能區域 =====  -->
